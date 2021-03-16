@@ -212,6 +212,217 @@ pub(crate) fn test_line(input: &str) -> LLLine {
 }
 
 #[test]
+fn test_punc_tokenizing() {
+    let input = r#",.;:'"#;
+
+    insta::assert_display_snapshot!(split_input(&input), @r###"
+    [
+        LLToken {
+            token_idx: 0,
+            pos_starts_at: 0,
+            pos_ends_at: 1,
+            token: Text(
+                ",",
+                PUNC,
+            ),
+        },
+        LLToken {
+            token_idx: 1,
+            pos_starts_at: 1,
+            pos_ends_at: 2,
+            token: Text(
+                ".",
+                PUNC,
+            ),
+        },
+        LLToken {
+            token_idx: 2,
+            pos_starts_at: 2,
+            pos_ends_at: 3,
+            token: Text(
+                ";",
+                PUNC,
+            ),
+        },
+        LLToken {
+            token_idx: 3,
+            pos_starts_at: 3,
+            pos_ends_at: 4,
+            token: Text(
+                ":",
+                PUNC,
+            ),
+        },
+        LLToken {
+            token_idx: 4,
+            pos_starts_at: 4,
+            pos_ends_at: 5,
+            token: Text(
+                "'",
+                PUNC,
+            ),
+        },
+        LLToken {
+            token_idx: 5,
+            pos_starts_at: 5,
+            pos_ends_at: 6,
+            token: Text(
+                """,
+                PUNC,
+            ),
+        },
+    ]
+    "###);
+}
+
+#[test]
+fn test_natn_tokenizing() {
+    let input = "0 1 10 100000000000";
+
+    insta::assert_display_snapshot!(split_input(&input), @r###"
+    [
+        LLToken {
+            token_idx: 0,
+            pos_starts_at: 0,
+            pos_ends_at: 1,
+            token: Text(
+                "0",
+                NATN,
+            ),
+        },
+        LLToken {
+            token_idx: 1,
+            pos_starts_at: 1,
+            pos_ends_at: 2,
+            token: Text(
+                " ",
+                SPACE,
+            ),
+        },
+        LLToken {
+            token_idx: 2,
+            pos_starts_at: 2,
+            pos_ends_at: 3,
+            token: Text(
+                "1",
+                NATN,
+            ),
+        },
+        LLToken {
+            token_idx: 3,
+            pos_starts_at: 3,
+            pos_ends_at: 4,
+            token: Text(
+                " ",
+                SPACE,
+            ),
+        },
+        LLToken {
+            token_idx: 4,
+            pos_starts_at: 4,
+            pos_ends_at: 6,
+            token: Text(
+                "10",
+                NATN,
+            ),
+        },
+        LLToken {
+            token_idx: 5,
+            pos_starts_at: 6,
+            pos_ends_at: 7,
+            token: Text(
+                " ",
+                SPACE,
+            ),
+        },
+        LLToken {
+            token_idx: 6,
+            pos_starts_at: 7,
+            pos_ends_at: 19,
+            token: Text(
+                "100000000000",
+                NATN,
+            ),
+        },
+    ]
+    "###);
+}
+
+#[test]
+fn test_space_tokenizing() {
+    let input = " |  |     ";
+
+    insta::assert_display_snapshot!(split_input(&input), @r###"
+    [
+        LLToken {
+            token_idx: 0,
+            pos_starts_at: 0,
+            pos_ends_at: 1,
+            token: Text(
+                " ",
+                SPACE,
+            ),
+        },
+        LLToken {
+            token_idx: 1,
+            pos_starts_at: 1,
+            pos_ends_at: 2,
+            token: Text(
+                "|",
+                SYMB,
+            ),
+        },
+        LLToken {
+            token_idx: 2,
+            pos_starts_at: 2,
+            pos_ends_at: 4,
+            token: Text(
+                "  ",
+                SPACE,
+            ),
+        },
+        LLToken {
+            token_idx: 3,
+            pos_starts_at: 4,
+            pos_ends_at: 5,
+            token: Text(
+                "|",
+                SYMB,
+            ),
+        },
+        LLToken {
+            token_idx: 4,
+            pos_starts_at: 5,
+            pos_ends_at: 10,
+            token: Text(
+                "     ",
+                SPACE,
+            ),
+        },
+    ]
+    "###);
+}
+
+#[test]
+fn test_other_tokenization() {
+    let input = "unknown";
+
+    insta::assert_display_snapshot!(split_input(&input), @r###"
+    [
+        LLToken {
+            token_idx: 0,
+            pos_starts_at: 0,
+            pos_ends_at: 7,
+            token: Text(
+                "unknown",
+                OTHER,
+            ),
+        },
+    ]
+    "###);
+}
+
+#[test]
 fn test_tokenizing() {
     let input = ". 1 000.23. € .5";
 
